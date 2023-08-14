@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MerjaneRefacto.Presentation.Entities;
+using MerjaneRefacto.Core.Entities;
 
 namespace MerjaneRefacto.Presentation.Database.Context
 {

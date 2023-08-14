@@ -2,9 +2,9 @@
 using Moq;
 using Moq.EntityFrameworkCore;
 using MerjaneRefacto.Presentation.Database.Context;
-using MerjaneRefacto.Presentation.Entities;
 using MerjaneRefacto.Presentation.Services;
 using MerjaneRefacto.Presentation.Services.Impl;
+using MerjaneRefacto.Core.Entities;
 
 namespace MerjaneRefacto.Presentation.Tests.Services
 {

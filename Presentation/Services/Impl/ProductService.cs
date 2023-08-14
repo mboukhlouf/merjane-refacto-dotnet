@@ -1,5 +1,5 @@
-﻿using MerjaneRefacto.Presentation.Database.Context;
-using MerjaneRefacto.Presentation.Entities;
+﻿using MerjaneRefacto.Core.Entities;
+using MerjaneRefacto.Presentation.Database.Context;
 
 namespace MerjaneRefacto.Presentation.Services.Impl
 {

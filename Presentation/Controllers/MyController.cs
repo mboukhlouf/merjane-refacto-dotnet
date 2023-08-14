@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MerjaneRefacto.Presentation.Database.Context;
 using MerjaneRefacto.Presentation.Dtos.Product;
 using MerjaneRefacto.Presentation.Services.Impl;
+using MerjaneRefacto.Core.Entities;
 
 namespace MerjaneRefacto.Presentation
 {
@@ -23,14 +24,14 @@ namespace MerjaneRefacto.Presentation
         [ProducesResponseType(200)]
         public ActionResult<ProcessOrderResponse> ProcessOrder(long orderId)
         {
-            Entities.Order? order = _ctx.Orders
+            Order? order = _ctx.Orders
                 .Include(o => o.Items)
                 .SingleOrDefault(o => o.Id == orderId);
             Console.WriteLine(order);
             List<long> ids = new() { orderId };
-            ICollection<Entities.Product>? products = order.Items;
+            ICollection<Product>? products = order.Items;
 
-            foreach (Entities.Product p in products)
+            foreach (Product p in products)
             {
                 if (p.Type == "NORMAL")
                 {

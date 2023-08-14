@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using MerjaneRefacto.Presentation.Database.Context;
-using MerjaneRefacto.Presentation.Entities;
 using MerjaneRefacto.Presentation.Services;
+using MerjaneRefacto.Core.Entities;
 
 namespace MerjaneRefacto.Presentation.Tests.Controllers
 {

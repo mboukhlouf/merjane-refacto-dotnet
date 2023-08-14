@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MerjaneRefacto.Presentation.Entities
+namespace MerjaneRefacto.Core.Entities
 {
     [Table("orders")]
     public class Order
