@@ -1,26 +1,31 @@
 ﻿using MerjaneRefacto.Core.Abstractions.Repositories;
 using MerjaneRefacto.Core.Abstractions.Services;
 using MerjaneRefacto.Core.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace MerjaneRefacto.Core.UseCases.Orders.ProcessOrder
 {
     internal sealed class ProcessOrderUseCase : IProcessOrderUseCase
     {
+        private readonly ILogger<ProcessOrderUseCase> logger;
         private readonly IProductService productService;
         private readonly IUnitOfWork unitOfWork;
 
-        public ProcessOrderUseCase(IProductService productService,
+        public ProcessOrderUseCase(ILogger<ProcessOrderUseCase> logger,
+            IProductService productService,
             IUnitOfWork unitOfWork)
         {
             this.productService = productService;
             this.unitOfWork = unitOfWork;
+            this.logger = logger;
         }
 
         public async Task<ProcessOrderResponse> HandleAsync(ProcessOrderRequest request)
         {
             Order? order = unitOfWork.Orders.GetOrder(request.orderId);
 
-            Console.WriteLine(order);
+            logger.LogInformation($"Processing order with id {order.Id}");
+
             List<long> ids = new() { request.orderId };
             ICollection<Product>? products = order.Items;
 

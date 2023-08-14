@@ -14,6 +14,8 @@ builder.Services.AddInfrastructure();
 builder.Services.AddPersistence();
 builder.Services.AddCore();
 
+builder.Services.AddLogging();
+
 WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
