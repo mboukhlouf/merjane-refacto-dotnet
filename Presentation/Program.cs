@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MerjaneRefacto.Presentation.Database.Context;
 using MerjaneRefacto.Presentation.Services;
 using MerjaneRefacto.Presentation.Services.Impl;
+using MerjaneRefacto.Infrastructure;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    _ = options.UseInMemoryDatabase($"InMemoryDb");
-});
+builder.Services.AddPersistence();
 
 WebApplication app = builder.Build();
 
