@@ -23,8 +23,13 @@ namespace MerjaneRefacto.Core.UseCases.Orders.ProcessOrder
             this.dateTimeProvider = dateTimeProvider;
         }
 
+        // In this use case, we assume that the order is already saved in the database with the products
         public async Task<ProcessOrderResponse> HandleAsync(ProcessOrderRequest request)
         {
+            // Order not found not handled
+            // Instead of throwing exceptions, I would return a discriminated union type
+            // Something like OneOf<ProcessOrderResponse, NotFoundError, ValidationError...>
+            // Or a generic ResultType defined at the Core level
             Order? order = unitOfWork.Orders.GetOrder(request.orderId);
 
             logger.LogInformation($"Processing order with id {order.Id}");
