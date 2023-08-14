@@ -1,11 +1,10 @@
-﻿namespace Core.Abstractions.Repositories
+﻿namespace Core.Abstractions.Repositories;
+
+public interface IUnitOfWork
 {
-    public interface IUnitOfWork
-    {
-        IOrderRepository Orders { get; }
+    IOrderRepository Orders { get; }
 
-        IProductRepository Products { get; }
+    IProductRepository Products { get; }
 
-        Task SaveAsync(CancellationToken cancellationToken);
-    }
+    Task SaveAsync(CancellationToken cancellationToken);
 }

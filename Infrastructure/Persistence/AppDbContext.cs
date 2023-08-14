@@ -1,32 +1,31 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MerjaneRefacto.Core.Entities;
 
-namespace MerjaneRefacto.Presentation.Database.Context
+namespace MerjaneRefacto.Presentation.Database.Context;
+
+public class AppDbContext : DbContext
 {
-    public class AppDbContext : DbContext
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
-        }
+    }
 
-        public AppDbContext() : base()
-        {
-        }
+    public AppDbContext() : base()
+    {
+    }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
 
-            // Configure many-to-many relationship between Order and Product
-            _ = modelBuilder.Entity<Order>()
-                .HasMany(o => o.Items)
-                .WithMany(); // Since Product doesn't have a collection for Order
-
-        }
-
-
-        public virtual DbSet<Order> Orders { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
+        // Configure many-to-many relationship between Order and Product
+        _ = modelBuilder.Entity<Order>()
+            .HasMany(o => o.Items)
+            .WithMany(); // Since Product doesn't have a collection for Order
 
     }
+
+
+    public virtual DbSet<Order> Orders { get; set; }
+    public virtual DbSet<Product> Products { get; set; }
+
 }

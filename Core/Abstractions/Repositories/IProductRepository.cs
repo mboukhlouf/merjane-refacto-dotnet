@@ -1,9 +1,8 @@
 ﻿using MerjaneRefacto.Core.Entities;
 
-namespace Core.Abstractions.Repositories
+namespace Core.Abstractions.Repositories;
+
+public interface IProductRepository
 {
-    public interface IProductRepository
-    {
-        void Update(Product product);
-    }
+    void Update(Product product);
 }

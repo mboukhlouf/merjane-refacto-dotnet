@@ -1,12 +1,11 @@
-﻿namespace MerjaneRefacto.Core.Abstractions.Services
+﻿namespace MerjaneRefacto.Core.Abstractions.Services;
+
+// WARN: Should not be changed during the exercise
+public interface INotificationService
 {
-    // WARN: Should not be changed during the exercise
-    public interface INotificationService
-    {
-        public void SendDelayNotification(int leadTime, string productName);
+    public void SendDelayNotification(int leadTime, string productName);
 
-        public void SendOutOfStockNotification(string productName);
+    public void SendOutOfStockNotification(string productName);
 
-        public void SendExpirationNotification(string productName, DateTime expiryDate);
-    }
+    public void SendExpirationNotification(string productName, DateTime expiryDate);
 }

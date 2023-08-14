@@ -3,38 +3,37 @@ using MerjaneRefacto.Presentation.Services.Impl;
 using MerjaneRefacto.Core.Entities;
 using MerjaneRefacto.Core.Abstractions.Services;
 
-namespace MerjaneRefacto.Presentation.Tests.Services
+namespace MerjaneRefacto.Presentation.Tests.Services;
+
+public class MyUnitTests
 {
-    public class MyUnitTests
+    private readonly Mock<INotificationService> _mockNotificationService;
+    private readonly ProductService _productService;
+
+    public MyUnitTests()
     {
-        private readonly Mock<INotificationService> _mockNotificationService;
-        private readonly ProductService _productService;
+        _mockNotificationService = new Mock<INotificationService>();
+        _productService = new ProductService(_mockNotificationService.Object);
+    }
 
-        public MyUnitTests()
+    [Fact]
+    public void Test()
+    {
+        // GIVEN
+        Product product = new()
         {
-            _mockNotificationService = new Mock<INotificationService>();
-            _productService = new ProductService(_mockNotificationService.Object);
-        }
+            LeadTime = 15,
+            Available = 0,
+            Type = "NORMAL",
+            Name = "RJ45 Cable"
+        };
 
-        [Fact]
-        public void Test()
-        {
-            // GIVEN
-            Product product = new()
-            {
-                LeadTime = 15,
-                Available = 0,
-                Type = "NORMAL",
-                Name = "RJ45 Cable"
-            };
+        // WHEN
+        _productService.NotifyDelay(product.LeadTime, product);
 
-            // WHEN
-            _productService.NotifyDelay(product.LeadTime, product);
-
-            // THEN
-            Assert.Equal(0, product.Available);
-            Assert.Equal(15, product.LeadTime);
-            _mockNotificationService.Verify(service => service.SendDelayNotification(product.LeadTime, product.Name), Times.Once());
-        }
+        // THEN
+        Assert.Equal(0, product.Available);
+        Assert.Equal(15, product.LeadTime);
+        _mockNotificationService.Verify(service => service.SendDelayNotification(product.LeadTime, product.Name), Times.Once());
     }
 }

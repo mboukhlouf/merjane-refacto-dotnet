@@ -7,82 +7,81 @@ using MerjaneRefacto.Presentation.Services;
 using MerjaneRefacto.Core.Entities;
 using MerjaneRefacto.Core.Abstractions.Services;
 
-namespace MerjaneRefacto.Presentation.Tests.Controllers
+namespace MerjaneRefacto.Presentation.Tests.Controllers;
+
+public class OrdersControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
 {
-    public class OrdersControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
+    private readonly WebApplicationFactory<Program> _factory;
+    private readonly AppDbContext _context;
+    private readonly Mock<INotificationService> _mockNotificationService;
+
+    public OrdersControllerIntegrationTests(WebApplicationFactory<Program> factory)
     {
-        private readonly WebApplicationFactory<Program> _factory;
-        private readonly AppDbContext _context;
-        private readonly Mock<INotificationService> _mockNotificationService;
+        _mockNotificationService = new Mock<INotificationService>();
 
-        public OrdersControllerIntegrationTests(WebApplicationFactory<Program> factory)
+        _factory = factory.WithWebHostBuilder(builder =>
         {
-            _mockNotificationService = new Mock<INotificationService>();
-
-            _factory = factory.WithWebHostBuilder(builder =>
+            _ = builder.ConfigureServices(services =>
             {
-                _ = builder.ConfigureServices(services =>
+                _ = services.AddSingleton(_mockNotificationService.Object);
+
+                ServiceDescriptor? descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
+                if (descriptor != null)
                 {
-                    _ = services.AddSingleton(_mockNotificationService.Object);
+                    _ = services.Remove(descriptor);
+                }
 
-                    ServiceDescriptor? descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
-                    if (descriptor != null)
-                    {
-                        _ = services.Remove(descriptor);
-                    }
-
-                    // Add ApplicationDbContext using an in-memory database for testing
-                    _ = services.AddDbContext<AppDbContext>(options =>
-                    {
-                        _ = options.UseInMemoryDatabase($"InMemoryDbForTesting-{GetType()}");
-                    });
-                    _ = services.AddScoped((_sp) => _mockNotificationService.Object);
-
-
-                    ServiceProvider sp = services.BuildServiceProvider();
+                // Add ApplicationDbContext using an in-memory database for testing
+                _ = services.AddDbContext<AppDbContext>(options =>
+                {
+                    _ = options.UseInMemoryDatabase($"InMemoryDbForTesting-{GetType()}");
                 });
+                _ = services.AddScoped((_sp) => _mockNotificationService.Object);
+
+
+                ServiceProvider sp = services.BuildServiceProvider();
             });
+        });
 
-            IServiceScope scope = _factory.Services.CreateScope();
-            _context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        }
+        IServiceScope scope = _factory.Services.CreateScope();
+        _context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    }
 
-        [Fact]
-        public async Task ProcessOrderShouldReturn()
+    [Fact]
+    public async Task ProcessOrderShouldReturn()
+    {
+        HttpClient client = _factory.CreateClient();
+
+        List<Product> allProducts = CreateProducts();
+        HashSet<Product> orderItems = new(allProducts);
+        Order order = CreateOrder(orderItems);
+        await _context.Products.AddRangeAsync(allProducts);
+        _ = await _context.Orders.AddAsync(order);
+        _ = await _context.SaveChangesAsync();
+        _context.ChangeTracker.Clear();
+
+        HttpResponseMessage response = await client.PostAsync($"/orders/{order.Id}/processOrder", null);
+        _ = response.EnsureSuccessStatusCode();
+
+        Order? resultOrder = await _context.Orders.FindAsync(order.Id);
+        Assert.Equal(resultOrder.Id, order.Id);
+    }
+
+    private static Order CreateOrder(HashSet<Product> products)
+    {
+        return new Order { Items = products };
+    }
+
+    private static List<Product> CreateProducts()
+    {
+        return new List<Product>
         {
-            HttpClient client = _factory.CreateClient();
-
-            List<Product> allProducts = CreateProducts();
-            HashSet<Product> orderItems = new(allProducts);
-            Order order = CreateOrder(orderItems);
-            await _context.Products.AddRangeAsync(allProducts);
-            _ = await _context.Orders.AddAsync(order);
-            _ = await _context.SaveChangesAsync();
-            _context.ChangeTracker.Clear();
-
-            HttpResponseMessage response = await client.PostAsync($"/orders/{order.Id}/processOrder", null);
-            _ = response.EnsureSuccessStatusCode();
-
-            Order? resultOrder = await _context.Orders.FindAsync(order.Id);
-            Assert.Equal(resultOrder.Id, order.Id);
-        }
-
-        private static Order CreateOrder(HashSet<Product> products)
-        {
-            return new Order { Items = products };
-        }
-
-        private static List<Product> CreateProducts()
-        {
-            return new List<Product>
-            {
-                new Product { LeadTime = 15, Available = 30, Type = "NORMAL", Name = "USB Cable" },
-                new Product { LeadTime = 10, Available = 0, Type = "NORMAL", Name = "USB Dongle" },
-                new Product { LeadTime = 15, Available = 30, Type = "EXPIRABLE", Name = "Butter", ExpiryDate = DateTime.Now.AddDays(26) },
-                new Product { LeadTime = 90, Available = 6, Type = "EXPIRABLE", Name = "Milk", ExpiryDate = DateTime.Now.AddDays(-2) },
-                new Product { LeadTime = 15, Available = 30, Type = "SEASONAL", Name = "Watermelon", SeasonStartDate = DateTime.Now.AddDays(-2), SeasonEndDate = DateTime.Now.AddDays(58) },
-                new Product { LeadTime = 15, Available = 30, Type = "SEASONAL", Name = "Grapes", SeasonStartDate = DateTime.Now.AddDays(180), SeasonEndDate = DateTime.Now.AddDays(240) }
-            };
-        }
+            new Product { LeadTime = 15, Available = 30, Type = "NORMAL", Name = "USB Cable" },
+            new Product { LeadTime = 10, Available = 0, Type = "NORMAL", Name = "USB Dongle" },
+            new Product { LeadTime = 15, Available = 30, Type = "EXPIRABLE", Name = "Butter", ExpiryDate = DateTime.Now.AddDays(26) },
+            new Product { LeadTime = 90, Available = 6, Type = "EXPIRABLE", Name = "Milk", ExpiryDate = DateTime.Now.AddDays(-2) },
+            new Product { LeadTime = 15, Available = 30, Type = "SEASONAL", Name = "Watermelon", SeasonStartDate = DateTime.Now.AddDays(-2), SeasonEndDate = DateTime.Now.AddDays(58) },
+            new Product { LeadTime = 15, Available = 30, Type = "SEASONAL", Name = "Grapes", SeasonStartDate = DateTime.Now.AddDays(180), SeasonEndDate = DateTime.Now.AddDays(240) }
+        };
     }
 }

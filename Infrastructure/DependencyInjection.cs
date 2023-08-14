@@ -6,26 +6,25 @@ using MerjaneRefacto.Presentation.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MerjaneRefacto.Infrastructure
+namespace MerjaneRefacto.Infrastructure;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+        services.AddScoped<INotificationService, NotificationService>();
+        return services;
+    }
+
+    public static IServiceCollection AddPersistence(this IServiceCollection services)
+    {
+        services.AddDbContext<AppDbContext>(options =>
         {
-            services.AddScoped<INotificationService, NotificationService>();
-            return services;
-        }
+            _ = options.UseInMemoryDatabase($"InMemoryDb");
+        });
 
-        public static IServiceCollection AddPersistence(this IServiceCollection services)
-        {
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                _ = options.UseInMemoryDatabase($"InMemoryDb");
-            });
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-            return services;
-        }
+        return services;
     }
 }
