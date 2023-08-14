@@ -1,4 +1,6 @@
-﻿using MerjaneRefacto.Presentation.Database.Context;
+﻿using Core.Repositories;
+using MerjaneRefacto.Infrastructure.Persistence.Repositories;
+using MerjaneRefacto.Presentation.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,6 +19,8 @@ namespace MerjaneRefacto.Infrastructure
             {
                 _ = options.UseInMemoryDatabase($"InMemoryDb");
             });
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }

@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MerjaneRefacto.Presentation.Database.Context;
 using MerjaneRefacto.Presentation.Dtos.Product;
 using MerjaneRefacto.Presentation.Services.Impl;
 using MerjaneRefacto.Core.Entities;
+using Core.Repositories;
 
 namespace MerjaneRefacto.Presentation
 {
@@ -12,21 +11,20 @@ namespace MerjaneRefacto.Presentation
     public class OrdersController : ControllerBase
     {
         private readonly ProductService _ps;
-        private readonly AppDbContext _ctx;
+        private readonly IUnitOfWork unitOfWork;
 
-        public OrdersController(ProductService ps, AppDbContext ctx)
+        public OrdersController(ProductService ps, IUnitOfWork unitOfWork)
         {
             _ps = ps;
-            _ctx = ctx;
+            this.unitOfWork = unitOfWork;
         }
 
         [HttpPost("{orderId}/processOrder")]
         [ProducesResponseType(200)]
-        public ActionResult<ProcessOrderResponse> ProcessOrder(long orderId)
+        public async Task<ActionResult<ProcessOrderResponse>> ProcessOrder(long orderId)
         {
-            Order? order = _ctx.Orders
-                .Include(o => o.Items)
-                .SingleOrDefault(o => o.Id == orderId);
+            Order? order = unitOfWork.Orders.GetOrder(orderId);
+
             Console.WriteLine(order);
             List<long> ids = new() { orderId };
             ICollection<Product>? products = order.Items;
@@ -38,8 +36,7 @@ namespace MerjaneRefacto.Presentation
                     if (p.Available > 0)
                     {
                         p.Available -= 1;
-                        _ctx.Entry(p).State = EntityState.Modified;
-                        _ = _ctx.SaveChanges();
+                        await unitOfWork.SaveAsync(CancellationToken.None);
 
                     }
                     else
@@ -56,7 +53,7 @@ namespace MerjaneRefacto.Presentation
                     if (DateTime.Now.Date > p.SeasonStartDate && DateTime.Now.Date < p.SeasonEndDate && p.Available > 0)
                     {
                         p.Available -= 1;
-                        _ = _ctx.SaveChanges();
+                        await unitOfWork.SaveAsync(CancellationToken.None);
                     }
                     else
                     {
@@ -68,7 +65,7 @@ namespace MerjaneRefacto.Presentation
                     if (p.Available > 0 && p.ExpiryDate > DateTime.Now.Date)
                     {
                         p.Available -= 1;
-                        _ = _ctx.SaveChanges();
+                        await unitOfWork.SaveAsync(CancellationToken.None);
                     }
                     else
                     {
