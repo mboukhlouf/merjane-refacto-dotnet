@@ -8,5 +8,7 @@ public interface IProductService
 
     void HandleSeasonalProduct(Product p);
 
+    void HandleFlashSaleProductPeriodEnded(Product product);
+
     void NotifyDelay(int leadTime, Product p);
 }

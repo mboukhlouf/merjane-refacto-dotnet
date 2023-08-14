@@ -47,6 +47,9 @@ namespace MerjaneRefacto.Core.UseCases.Orders.ProcessOrder
                     case "EXPIRABLE":
                         ProcessExpirableProduct(product);
                         break;
+                    case "FLASHSALE":
+                        ProcessFlashSaleProduct(product);
+                        break;
                     default:
                         throw new Exception($"Unknown product type: {product.Type}");
                 }
@@ -101,6 +104,30 @@ namespace MerjaneRefacto.Core.UseCases.Orders.ProcessOrder
                 productService.HandleExpiredProduct(product);
                 unitOfWork.Products.Update(product);
             }
+        }
+
+        private void ProcessFlashSaleProduct(Product product)
+        {
+            if (product.Available == 0)
+            {
+                logger.LogInformation($"FlashSale Product {product.Id} is not available anymore.");
+                return;
+            }
+
+            if (DateTime.Now.Date > product.FlashSaleEndDate)
+            {
+                productService.HandleFlashSaleProductPeriodEnded(product);
+                return;
+            }
+
+            if(DateTime.Now.Date < product.FlashSaleStartDate)
+            {
+                logger.LogInformation($"FlashSale period for Product {product.Id} didn't start yet.");
+                return;
+            }
+
+            product.Available -= 1;
+            unitOfWork.Products.Update(product);
         }
     }
 }

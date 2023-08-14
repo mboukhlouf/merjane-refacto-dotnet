@@ -81,7 +81,9 @@ public class OrdersControllerIntegrationTests : IClassFixture<WebApplicationFact
             new Product { LeadTime = 15, Available = 30, Type = "EXPIRABLE", Name = "Butter", ExpiryDate = DateTime.Now.AddDays(26) },
             new Product { LeadTime = 90, Available = 6, Type = "EXPIRABLE", Name = "Milk", ExpiryDate = DateTime.Now.AddDays(-2) },
             new Product { LeadTime = 15, Available = 30, Type = "SEASONAL", Name = "Watermelon", SeasonStartDate = DateTime.Now.AddDays(-2), SeasonEndDate = DateTime.Now.AddDays(58) },
-            new Product { LeadTime = 15, Available = 30, Type = "SEASONAL", Name = "Grapes", SeasonStartDate = DateTime.Now.AddDays(180), SeasonEndDate = DateTime.Now.AddDays(240) }
+            new Product { LeadTime = 15, Available = 30, Type = "SEASONAL", Name = "Grapes", SeasonStartDate = DateTime.Now.AddDays(180), SeasonEndDate = DateTime.Now.AddDays(240) },
+            new Product { LeadTime = 15, Available = 30, Type = "FLASHSALE", Name = "Bread", FlashSaleStartDate = DateTime.Now.AddDays(-1), FlashSaleEndDate = DateTime.Now.AddDays(1) },
+            new Product { LeadTime = 15, Available = 30, Type = "FLASHSALE", Name = "Cheese", FlashSaleStartDate = DateTime.Now.AddDays(2), FlashSaleEndDate = DateTime.Now.AddDays(4) }
         };
     }
 }

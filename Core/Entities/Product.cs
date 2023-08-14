@@ -31,4 +31,10 @@ public class Product
 
     [Column("season_end_date")]
     public DateTime? SeasonEndDate { get; set; }
+
+    [Column("flash_sale_start_date")]
+    public DateTime? FlashSaleStartDate { get; set; }
+
+    [Column("flash_sale_date")]
+    public DateTime? FlashSaleEndDate { get; set; }
 }

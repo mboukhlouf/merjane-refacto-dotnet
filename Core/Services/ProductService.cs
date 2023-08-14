@@ -47,4 +47,9 @@ public sealed class ProductService : IProductService
             p.Available = 0;
         }
     }
+
+    public void HandleFlashSaleProductPeriodEnded(Product product)
+    {
+        product.Available = 0;
+    }
 }
