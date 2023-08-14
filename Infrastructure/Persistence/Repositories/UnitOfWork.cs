@@ -1,4 +1,4 @@
-﻿using Core.Abstractions.Repositories;
+﻿using MerjaneRefacto.Core.Abstractions.Repositories;
 using MerjaneRefacto.Core.Entities;
 using MerjaneRefacto.Presentation.Database.Context;
 

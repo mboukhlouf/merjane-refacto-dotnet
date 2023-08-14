@@ -1,4 +1,4 @@
-﻿namespace Core.Abstractions.Repositories;
+﻿namespace MerjaneRefacto.Core.Abstractions.Repositories;
 
 public interface IUnitOfWork
 {

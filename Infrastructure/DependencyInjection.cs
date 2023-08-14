@@ -1,4 +1,4 @@
-﻿using Core.Abstractions.Repositories;
+﻿using MerjaneRefacto.Core.Abstractions.Repositories;
 using MerjaneRefacto.Core.Abstractions.Services;
 using MerjaneRefacto.Infrastructure.Persistence.Repositories;
 using MerjaneRefacto.Infrastructure.Services;

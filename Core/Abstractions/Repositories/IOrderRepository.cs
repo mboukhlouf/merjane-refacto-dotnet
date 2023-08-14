@@ -1,6 +1,6 @@
 ﻿using MerjaneRefacto.Core.Entities;
 
-namespace Core.Abstractions.Repositories;
+namespace MerjaneRefacto.Core.Abstractions.Repositories;
 
 public interface IOrderRepository
 {
