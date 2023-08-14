@@ -1,4 +1,6 @@
-﻿namespace MerjaneRefacto.Presentation.Services.Impl
+﻿using MerjaneRefacto.Core.Abstractions.Services;
+
+namespace MerjaneRefacto.Infrastructure.Services
 {
     // WARN: Should not be changed during the exercise
     public class NotificationService : INotificationService

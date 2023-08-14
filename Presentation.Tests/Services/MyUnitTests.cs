@@ -1,10 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Moq;
-using Moq.EntityFrameworkCore;
-using MerjaneRefacto.Presentation.Database.Context;
-using MerjaneRefacto.Presentation.Services;
+﻿using Moq;
 using MerjaneRefacto.Presentation.Services.Impl;
 using MerjaneRefacto.Core.Entities;
+using MerjaneRefacto.Core.Abstractions.Services;
 
 namespace MerjaneRefacto.Presentation.Tests.Services
 {

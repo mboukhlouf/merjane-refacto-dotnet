@@ -1,4 +1,5 @@
-﻿using MerjaneRefacto.Core.Entities;
+﻿using MerjaneRefacto.Core.Abstractions.Services;
+using MerjaneRefacto.Core.Entities;
 
 namespace MerjaneRefacto.Presentation.Services.Impl
 {

@@ -1,4 +1,4 @@
-﻿namespace MerjaneRefacto.Presentation.Services
+﻿namespace MerjaneRefacto.Core.Abstractions.Services
 {
     // WARN: Should not be changed during the exercise
     public interface INotificationService
