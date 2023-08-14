@@ -10,14 +10,17 @@ namespace MerjaneRefacto.Core.UseCases.Orders.ProcessOrder
         private readonly ILogger<ProcessOrderUseCase> logger;
         private readonly IProductService productService;
         private readonly IUnitOfWork unitOfWork;
+        private readonly IDateTimeProvider dateTimeProvider;
 
         public ProcessOrderUseCase(ILogger<ProcessOrderUseCase> logger,
             IProductService productService,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IDateTimeProvider dateTimeProvider)
         {
             this.productService = productService;
             this.unitOfWork = unitOfWork;
             this.logger = logger;
+            this.dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<ProcessOrderResponse> HandleAsync(ProcessOrderRequest request)
@@ -80,7 +83,7 @@ namespace MerjaneRefacto.Core.UseCases.Orders.ProcessOrder
 
         private void ProcessSeasonalProduct(Product product)
         {
-            if (DateTime.Now.Date > product.SeasonStartDate && DateTime.Now.Date < product.SeasonEndDate && product.Available > 0)
+            if (dateTimeProvider.Today > product.SeasonStartDate && dateTimeProvider.Today < product.SeasonEndDate && product.Available > 0)
             {
                 product.Available -= 1;
                 unitOfWork.Products.Update(product);
@@ -94,7 +97,7 @@ namespace MerjaneRefacto.Core.UseCases.Orders.ProcessOrder
 
         private void ProcessExpirableProduct(Product product)
         {
-            if (product.Available > 0 && product.ExpiryDate > DateTime.Now.Date)
+            if (product.Available > 0 && product.ExpiryDate > dateTimeProvider.Today)
             {
                 product.Available -= 1;
                 unitOfWork.Products.Update(product);
@@ -114,13 +117,13 @@ namespace MerjaneRefacto.Core.UseCases.Orders.ProcessOrder
                 return;
             }
 
-            if (DateTime.Now.Date > product.FlashSaleEndDate)
+            if (dateTimeProvider.Today > product.FlashSaleEndDate)
             {
                 productService.HandleFlashSaleProductPeriodEnded(product);
                 return;
             }
 
-            if(DateTime.Now.Date < product.FlashSaleStartDate)
+            if(dateTimeProvider.Today < product.FlashSaleStartDate)
             {
                 logger.LogInformation($"FlashSale period for Product {product.Id} didn't start yet.");
                 return;
