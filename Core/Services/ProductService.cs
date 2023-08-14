@@ -5,49 +5,49 @@ namespace MerjaneRefacto.Core.Services;
 
 public sealed class ProductService : IProductService
 {
-    private readonly INotificationService _ns;
+    private readonly INotificationService notificationService;
     private readonly IDateTimeProvider dateTimeProvider;
 
-    public ProductService(INotificationService ns,
+    public ProductService(INotificationService notificationService,
         IDateTimeProvider dateTimeProvider)
     {
-        _ns = ns;
+        this.notificationService = notificationService;
         this.dateTimeProvider = dateTimeProvider;
     }
 
-    public void NotifyDelay(int leadTime, Product p)
+    public void NotifyDelay(int leadTime, Product product)
     {
-        p.LeadTime = leadTime;
-        _ns.SendDelayNotification(leadTime, p.Name);
+        product.LeadTime = leadTime;
+        notificationService.SendDelayNotification(leadTime, product.Name);
     }
 
-    public void HandleSeasonalProduct(Product p)
+    public void HandleSeasonalProduct(Product product)
     {
-        if (dateTimeProvider.Now.AddDays(p.LeadTime) > p.SeasonEndDate)
+        if (dateTimeProvider.Now.AddDays(product.LeadTime) > product.SeasonEndDate)
         {
-            _ns.SendOutOfStockNotification(p.Name);
-            p.Available = 0;
+            notificationService.SendOutOfStockNotification(product.Name);
+            product.Available = 0;
         }
-        else if (p.SeasonStartDate > dateTimeProvider.Now)
+        else if (product.SeasonStartDate > dateTimeProvider.Now)
         {
-            _ns.SendOutOfStockNotification(p.Name);
+            notificationService.SendOutOfStockNotification(product.Name);
         }
         else
         {
-            NotifyDelay(p.LeadTime, p);
+            NotifyDelay(product.LeadTime, product);
         }
     }
 
-    public void HandleExpiredProduct(Product p)
+    public void HandleExpiredProduct(Product product)
     {
-        if (p.Available > 0 && p.ExpiryDate > dateTimeProvider.Now)
+        if (product.Available > 0 && product.ExpiryDate > dateTimeProvider.Now)
         {
-            p.Available -= 1;
+            product.Available -= 1;
         }
         else
         {
-            _ns.SendExpirationNotification(p.Name, (DateTime)p.ExpiryDate);
-            p.Available = 0;
+            notificationService.SendExpirationNotification(product.Name, (DateTime)product.ExpiryDate);
+            product.Available = 0;
         }
     }
 

@@ -4,9 +4,9 @@ namespace MerjaneRefacto.Core.Abstractions.Services;
 
 public interface IProductService
 {
-    void HandleExpiredProduct(Product p);
+    void HandleExpiredProduct(Product product);
 
-    void HandleSeasonalProduct(Product p);
+    void HandleSeasonalProduct(Product product);
 
     void HandleFlashSaleProductPeriodEnded(Product product);
 
