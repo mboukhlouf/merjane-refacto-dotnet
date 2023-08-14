@@ -26,59 +26,81 @@ namespace MerjaneRefacto.Core.UseCases.Orders.ProcessOrder
 
             logger.LogInformation($"Processing order with id {order.Id}");
 
-            List<long> ids = new() { request.orderId };
+            // Unused variable
+            //var ids = new[]
+            //{
+            //    request.orderId
+            //};
+
             ICollection<Product>? products = order.Items;
 
             foreach (var product in products)
             {
-                if (product.Type == "NORMAL")
+                switch (product.Type)
                 {
-                    if (product.Available > 0)
-                    {
-                        product.Available -= 1;
-                        unitOfWork.Products.Update(product);
-                    }
-                    else
-                    {
-                        int leadTime = product.LeadTime;
-                        if (leadTime > 0)
-                        {
-                            productService.NotifyDelay(leadTime, product);
-                            unitOfWork.Products.Update(product);
-                        }
-                    }
-                }
-                else if (product.Type == "SEASONAL")
-                {
-                    if (DateTime.Now.Date > product.SeasonStartDate && DateTime.Now.Date < product.SeasonEndDate && product.Available > 0)
-                    {
-                        product.Available -= 1;
-                        unitOfWork.Products.Update(product);
-                    }
-                    else
-                    {
-                        productService.HandleSeasonalProduct(product);
-                        unitOfWork.Products.Update(product);
-                    }
-                }
-                else if (product.Type == "EXPIRABLE")
-                {
-                    if (product.Available > 0 && product.ExpiryDate > DateTime.Now.Date)
-                    {
-                        product.Available -= 1;
-                        unitOfWork.Products.Update(product);
-                    }
-                    else
-                    {
-                        productService.HandleExpiredProduct(product);
-                        unitOfWork.Products.Update(product);
-                    }
+                    case "NORMAL":
+                        ProcessNormalProduct(product);
+                        break;
+                    case "SEASONAL":
+                        ProcessSeasonalProduct(product);
+                        break;
+                    case "EXPIRABLE":
+                        ProcessExpirableProduct(product);
+                        break;
+                    default:
+                        throw new Exception($"Unknown product type: {product.Type}");
                 }
             }
 
             await unitOfWork.SaveAsync(CancellationToken.None);
 
             return new ProcessOrderResponse(order.Id);
+        }
+
+        private void ProcessNormalProduct(Product product)
+        {
+            if (product.Available > 0)
+            {
+                product.Available -= 1;
+                unitOfWork.Products.Update(product);
+            }
+            else
+            {
+                int leadTime = product.LeadTime;
+                if (leadTime > 0)
+                {
+                    productService.NotifyDelay(leadTime, product);
+                    unitOfWork.Products.Update(product);
+                }
+            }
+        }
+
+        private void ProcessSeasonalProduct(Product product)
+        {
+            if (DateTime.Now.Date > product.SeasonStartDate && DateTime.Now.Date < product.SeasonEndDate && product.Available > 0)
+            {
+                product.Available -= 1;
+                unitOfWork.Products.Update(product);
+            }
+            else
+            {
+                productService.HandleSeasonalProduct(product);
+                unitOfWork.Products.Update(product);
+            }
+        }
+
+        private void ProcessExpirableProduct(Product product)
+        {
+            if (product.Available > 0 && product.ExpiryDate > DateTime.Now.Date)
+            {
+                product.Available -= 1;
+                unitOfWork.Products.Update(product);
+            }
+            else
+            {
+                productService.HandleExpiredProduct(product);
+                unitOfWork.Products.Update(product);
+            }
         }
     }
 }
