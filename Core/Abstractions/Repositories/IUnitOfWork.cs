@@ -1,4 +1,4 @@
-﻿namespace Core.Repositories
+﻿namespace Core.Abstractions.Repositories
 {
     public interface IUnitOfWork
     {

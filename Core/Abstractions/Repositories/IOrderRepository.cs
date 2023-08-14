@@ -1,9 +1,9 @@
 ﻿using MerjaneRefacto.Core.Entities;
 
-namespace Core.Repositories
+namespace Core.Abstractions.Repositories
 {
     public interface IOrderRepository
     {
-        Order? GetOrder(long orderId); 
+        Order? GetOrder(long orderId);
     }
 }

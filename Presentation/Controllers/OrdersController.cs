@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using MerjaneRefacto.Presentation.Dtos.Product;
 using MerjaneRefacto.Presentation.Services.Impl;
 using MerjaneRefacto.Core.Entities;
-using Core.Repositories;
+using Core.Abstractions.Repositories;
 
 namespace MerjaneRefacto.Presentation
 {

@@ -1,4 +1,4 @@
-﻿using Core.Repositories;
+﻿using Core.Abstractions.Repositories;
 using MerjaneRefacto.Infrastructure.Persistence.Repositories;
 using MerjaneRefacto.Presentation.Database.Context;
 using Microsoft.EntityFrameworkCore;

@@ -1,6 +1,6 @@
 ﻿using MerjaneRefacto.Core.Entities;
 
-namespace Core.Repositories
+namespace Core.Abstractions.Repositories
 {
     public interface IProductRepository
     {
