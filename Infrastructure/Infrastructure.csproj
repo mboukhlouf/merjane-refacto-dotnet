@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>MerjaneRefacto.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <AssemblyName>MerjaneRefacto.$(MSBuildProjectName)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
