@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using MerjaneRefacto.Presentation.Database.Context;
-using MerjaneRefacto.Presentation.Services;
 using MerjaneRefacto.Core.Entities;
 using MerjaneRefacto.Core.Abstractions.Services;
 
@@ -61,6 +60,7 @@ public class OrdersControllerIntegrationTests : IClassFixture<WebApplicationFact
         _context.ChangeTracker.Clear();
 
         HttpResponseMessage response = await client.PostAsync($"/orders/{order.Id}/processOrder", null);
+        var responseMessage = await response.Content.ReadAsStringAsync();
         _ = response.EnsureSuccessStatusCode();
 
         Order? resultOrder = await _context.Orders.FindAsync(order.Id);

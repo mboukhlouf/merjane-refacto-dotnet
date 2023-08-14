@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using MerjaneRefacto.Presentation.Dtos.Product;
-using MerjaneRefacto.Presentation.Services.Impl;
 using MerjaneRefacto.Core.Entities;
 using Core.Abstractions.Repositories;
+using MerjaneRefacto.Core.Services;
+using MerjaneRefacto.Core.Abstractions.Services;
 
 namespace MerjaneRefacto.Presentation;
 
@@ -10,12 +11,12 @@ namespace MerjaneRefacto.Presentation;
 [Route("orders")]
 public class OrdersController : ControllerBase
 {
-    private readonly ProductService _ps;
+    private readonly IProductService productService;
     private readonly IUnitOfWork unitOfWork;
 
-    public OrdersController(ProductService ps, IUnitOfWork unitOfWork)
+    public OrdersController(IProductService ps, IUnitOfWork unitOfWork)
     {
-        _ps = ps;
+        productService = ps;
         this.unitOfWork = unitOfWork;
     }
 
@@ -43,7 +44,7 @@ public class OrdersController : ControllerBase
                     int leadTime = product.LeadTime;
                     if (leadTime > 0)
                     {
-                        _ps.NotifyDelay(leadTime, product);
+                        productService.NotifyDelay(leadTime, product);
                         unitOfWork.Products.Update(product);
                     }
                 }
@@ -57,7 +58,7 @@ public class OrdersController : ControllerBase
                 }
                 else
                 {
-                    _ps.HandleSeasonalProduct(product);
+                    productService.HandleSeasonalProduct(product);
                     unitOfWork.Products.Update(product);
                 }
             }
@@ -70,7 +71,7 @@ public class OrdersController : ControllerBase
                 }
                 else
                 {
-                    _ps.HandleExpiredProduct(product);
+                    productService.HandleExpiredProduct(product);
                     unitOfWork.Products.Update(product);
                 }
             }

@@ -1,7 +1,7 @@
 ﻿using Moq;
-using MerjaneRefacto.Presentation.Services.Impl;
 using MerjaneRefacto.Core.Entities;
 using MerjaneRefacto.Core.Abstractions.Services;
+using MerjaneRefacto.Core.Services;
 
 namespace MerjaneRefacto.Presentation.Tests.Services;
 

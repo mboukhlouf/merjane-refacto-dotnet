@@ -1,9 +1,9 @@
 ﻿using MerjaneRefacto.Core.Abstractions.Services;
 using MerjaneRefacto.Core.Entities;
 
-namespace MerjaneRefacto.Presentation.Services.Impl;
+namespace MerjaneRefacto.Core.Services;
 
-public sealed class ProductService
+public sealed class ProductService : IProductService
 {
     private readonly INotificationService _ns;
 

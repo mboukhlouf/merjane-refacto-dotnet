@@ -1,5 +1,5 @@
-using MerjaneRefacto.Presentation.Services.Impl;
 using MerjaneRefacto.Infrastructure;
+using MerjaneRefacto.Core;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +9,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<ProductService>();
+
+builder.Services.AddInfrastructure();
 builder.Services.AddPersistence();
+builder.Services.AddCore();
 
 WebApplication app = builder.Build();
 
