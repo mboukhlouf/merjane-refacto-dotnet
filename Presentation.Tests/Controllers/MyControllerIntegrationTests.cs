@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using Refacto.DotNet.Controllers.Database.Context;
-using Refacto.DotNet.Controllers.Entities;
-using Refacto.DotNet.Controllers.Services;
+using MerjaneRefacto.Presentation.Database.Context;
+using MerjaneRefacto.Presentation.Entities;
+using MerjaneRefacto.Presentation.Services;
 
-namespace Refacto.Dotnet.Controllers.Tests.Controllers
+namespace MerjaneRefacto.Presentation.Tests.Controllers
 {
     public class MyControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
     {

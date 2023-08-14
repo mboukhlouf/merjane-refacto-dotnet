@@ -1,4 +1,4 @@
-﻿namespace Refacto.DotNet.Controllers.Services
+﻿namespace MerjaneRefacto.Presentation.Services
 {
     // WARN: Should not be changed during the exercise
     public interface INotificationService

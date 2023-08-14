@@ -1,4 +1,4 @@
-﻿namespace Refacto.DotNet.Controllers.Services.Impl
+﻿namespace MerjaneRefacto.Presentation.Services.Impl
 {
     // WARN: Should not be changed during the exercise
     public class NotificationService : INotificationService

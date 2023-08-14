@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Refacto.DotNet.Controllers.Entities;
+using MerjaneRefacto.Presentation.Entities;
 
-namespace Refacto.DotNet.Controllers.Database.Context
+namespace MerjaneRefacto.Presentation.Database.Context
 {
     public class AppDbContext : DbContext
     {

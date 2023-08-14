@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Refacto.DotNet.Controllers.Database.Context;
-using Refacto.DotNet.Controllers.Dtos.Product;
-using Refacto.DotNet.Controllers.Services.Impl;
+using MerjaneRefacto.Presentation.Database.Context;
+using MerjaneRefacto.Presentation.Dtos.Product;
+using MerjaneRefacto.Presentation.Services.Impl;
 
-namespace Refacto.DotNet.Controllers.Controllers
+namespace MerjaneRefacto.Presentation
 {
     [ApiController]
     [Route("orders")]

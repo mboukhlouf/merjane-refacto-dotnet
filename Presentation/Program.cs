@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Refacto.DotNet.Controllers.Database.Context;
-using Refacto.DotNet.Controllers.Services;
-using Refacto.DotNet.Controllers.Services.Impl;
+using MerjaneRefacto.Presentation.Database.Context;
+using MerjaneRefacto.Presentation.Services;
+using MerjaneRefacto.Presentation.Services.Impl;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

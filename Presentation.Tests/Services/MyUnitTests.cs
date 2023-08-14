@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Moq;
 using Moq.EntityFrameworkCore;
-using Refacto.DotNet.Controllers.Database.Context;
-using Refacto.DotNet.Controllers.Entities;
-using Refacto.DotNet.Controllers.Services;
-using Refacto.DotNet.Controllers.Services.Impl;
+using MerjaneRefacto.Presentation.Database.Context;
+using MerjaneRefacto.Presentation.Entities;
+using MerjaneRefacto.Presentation.Services;
+using MerjaneRefacto.Presentation.Services.Impl;
 
-namespace Refacto.DotNet.Controllers.Tests.Services
+namespace MerjaneRefacto.Presentation.Tests.Services
 {
     public class MyUnitTests
     {

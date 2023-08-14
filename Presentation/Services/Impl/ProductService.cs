@@ -1,7 +1,7 @@
-﻿using Refacto.DotNet.Controllers.Database.Context;
-using Refacto.DotNet.Controllers.Entities;
+﻿using MerjaneRefacto.Presentation.Database.Context;
+using MerjaneRefacto.Presentation.Entities;
 
-namespace Refacto.DotNet.Controllers.Services.Impl
+namespace MerjaneRefacto.Presentation.Services.Impl
 {
     public class ProductService
     {
