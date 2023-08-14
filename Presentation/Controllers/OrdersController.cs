@@ -29,50 +29,54 @@ namespace MerjaneRefacto.Presentation
             List<long> ids = new() { orderId };
             ICollection<Product>? products = order.Items;
 
-            foreach (Product p in products)
+            foreach (var product in products)
             {
-                if (p.Type == "NORMAL")
+                if (product.Type == "NORMAL")
                 {
-                    if (p.Available > 0)
+                    if (product.Available > 0)
                     {
-                        p.Available -= 1;
-                        await unitOfWork.SaveAsync(CancellationToken.None);
-
+                        product.Available -= 1;
+                        unitOfWork.Products.Update(product);
                     }
                     else
                     {
-                        int leadTime = p.LeadTime;
+                        int leadTime = product.LeadTime;
                         if (leadTime > 0)
                         {
-                            _ps.NotifyDelay(leadTime, p);
+                            _ps.NotifyDelay(leadTime, product);
+                            unitOfWork.Products.Update(product);
                         }
                     }
                 }
-                else if (p.Type == "SEASONAL")
+                else if (product.Type == "SEASONAL")
                 {
-                    if (DateTime.Now.Date > p.SeasonStartDate && DateTime.Now.Date < p.SeasonEndDate && p.Available > 0)
+                    if (DateTime.Now.Date > product.SeasonStartDate && DateTime.Now.Date < product.SeasonEndDate && product.Available > 0)
                     {
-                        p.Available -= 1;
-                        await unitOfWork.SaveAsync(CancellationToken.None);
+                        product.Available -= 1;
+                        unitOfWork.Products.Update(product);
                     }
                     else
                     {
-                        _ps.HandleSeasonalProduct(p);
+                        _ps.HandleSeasonalProduct(product);
+                        unitOfWork.Products.Update(product);
                     }
                 }
-                else if (p.Type == "EXPIRABLE")
+                else if (product.Type == "EXPIRABLE")
                 {
-                    if (p.Available > 0 && p.ExpiryDate > DateTime.Now.Date)
+                    if (product.Available > 0 && product.ExpiryDate > DateTime.Now.Date)
                     {
-                        p.Available -= 1;
-                        await unitOfWork.SaveAsync(CancellationToken.None);
+                        product.Available -= 1;
+                        unitOfWork.Products.Update(product);
                     }
                     else
                     {
-                        _ps.HandleExpiredProduct(p);
+                        _ps.HandleExpiredProduct(product);
+                        unitOfWork.Products.Update(product);
                     }
                 }
             }
+
+            await unitOfWork.SaveAsync(CancellationToken.None);
 
             return new ProcessOrderResponse(order.Id);
         }

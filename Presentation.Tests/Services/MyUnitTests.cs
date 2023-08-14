@@ -11,17 +11,12 @@ namespace MerjaneRefacto.Presentation.Tests.Services
     public class MyUnitTests
     {
         private readonly Mock<INotificationService> _mockNotificationService;
-        private readonly Mock<AppDbContext> _mockDbContext;
-        private readonly Mock<DbSet<Product>> _mockDbSet;
         private readonly ProductService _productService;
 
         public MyUnitTests()
         {
             _mockNotificationService = new Mock<INotificationService>();
-            _mockDbContext = new Mock<AppDbContext>();
-            _mockDbSet = new Mock<DbSet<Product>>();
-            _ = _mockDbContext.Setup(x => x.Products).ReturnsDbSet(Array.Empty<Product>());
-            _productService = new ProductService(_mockNotificationService.Object, _mockDbContext.Object);
+            _productService = new ProductService(_mockNotificationService.Object);
         }
 
         [Fact]
@@ -42,7 +37,6 @@ namespace MerjaneRefacto.Presentation.Tests.Services
             // THEN
             Assert.Equal(0, product.Available);
             Assert.Equal(15, product.LeadTime);
-            _mockDbContext.Verify(ctx => ctx.SaveChanges(), Times.Once());
             _mockNotificationService.Verify(service => service.SendDelayNotification(product.LeadTime, product.Name), Times.Once());
         }
     }

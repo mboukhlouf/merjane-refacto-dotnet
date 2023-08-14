@@ -1,23 +1,19 @@
 ﻿using MerjaneRefacto.Core.Entities;
-using MerjaneRefacto.Presentation.Database.Context;
 
 namespace MerjaneRefacto.Presentation.Services.Impl
 {
-    public class ProductService
+    public sealed class ProductService
     {
         private readonly INotificationService _ns;
-        private readonly AppDbContext _ctx;
 
-        public ProductService(INotificationService ns, AppDbContext ctx)
+        public ProductService(INotificationService ns)
         {
             _ns = ns;
-            _ctx = ctx;
         }
 
         public void NotifyDelay(int leadTime, Product p)
         {
             p.LeadTime = leadTime;
-            _ = _ctx.SaveChanges();
             _ns.SendDelayNotification(leadTime, p.Name);
         }
 
@@ -27,12 +23,10 @@ namespace MerjaneRefacto.Presentation.Services.Impl
             {
                 _ns.SendOutOfStockNotification(p.Name);
                 p.Available = 0;
-                _ = _ctx.SaveChanges();
             }
             else if (p.SeasonStartDate > DateTime.Now)
             {
                 _ns.SendOutOfStockNotification(p.Name);
-                _ = _ctx.SaveChanges();
             }
             else
             {
@@ -45,13 +39,11 @@ namespace MerjaneRefacto.Presentation.Services.Impl
             if (p.Available > 0 && p.ExpiryDate > DateTime.Now)
             {
                 p.Available -= 1;
-                _ = _ctx.SaveChanges();
             }
             else
             {
                 _ns.SendExpirationNotification(p.Name, (DateTime)p.ExpiryDate);
                 p.Available = 0;
-                _ = _ctx.SaveChanges();
             }
         }
     }

@@ -17,6 +17,7 @@ namespace MerjaneRefacto.Infrastructure.Persistence.Repositories
         {
             var order = orders
                 .Include(o => o.Items)
+                .AsNoTracking()
                 .SingleOrDefault(o => o.Id == orderId);
             return order;
         }

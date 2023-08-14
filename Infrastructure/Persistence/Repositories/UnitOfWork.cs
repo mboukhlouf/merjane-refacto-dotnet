@@ -8,17 +8,19 @@ namespace MerjaneRefacto.Infrastructure.Persistence.Repositories
     {
         private readonly AppDbContext dbContext;
         private readonly OrderRepository orderRepository;
+        private readonly ProductRepository productRepository;
 
         public UnitOfWork(AppDbContext dbContext)
         {
             this.dbContext = dbContext;
 
             orderRepository = new OrderRepository(dbContext.Set<Order>());
+            productRepository = new ProductRepository(dbContext.Set<Product>());
         }
 
         public IOrderRepository Orders => orderRepository;
 
-        public IProductRepository Products => throw new NotImplementedException();
+        public IProductRepository Products => productRepository;
 
         public Task SaveAsync(CancellationToken cancellationToken)
         {
